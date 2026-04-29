@@ -1,0 +1,22 @@
+table _Treinamento
+	lineageTag: 3a63e049-362d-44c1-abf7-77cd8d809673
+
+	column 'Coluna 1'
+		dataType: string
+		lineageTag: 18f13d88-2820-4c06-afb8-a2d8721fcba2
+		summarizeBy: none
+		sourceColumn: Coluna 1
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Treinamento = m
+		mode: import
+		source =
+				let
+				    Fonte = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45WKlaK1UEiYwE=", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [#"Coluna 1" = _t]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(Fonte,{{"Coluna 1", type text}})
+				in
+				    #"Tipo Alterado"
+
+	annotation PBI_ResultType = Table
+
